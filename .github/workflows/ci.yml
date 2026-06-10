@@ -22,23 +22,15 @@ jobs:
 
       - name: Syntax check
         run: |
-          python -m py_compile backend/server.py
-          python -m py_compile backend/fcntl.py
+          python -m py_compile server.py
+          python -m py_compile fcntl.py
           echo "Todos os modulos OK"
 
       - name: Startup test (sem chaves)
-        env:
-          ANTHROPIC_API_KEY: "sk-ant-test"
-          ALUNO_TOKEN: "test-token"
-          PORT: "8792"
         run: |
           python -c "
-          import os, importlib.util, pathlib
-          # Verifica que o servidor importa sem erro de sintaxe
-          spec = importlib.util.spec_from_file_location('server', 'backend/server.py')
-          # Apenas verifica syntax — nao inicializa o app (evita chamadas de rede)
-          import ast
-          src = pathlib.Path('backend/server.py').read_text()
+          import ast, pathlib
+          src = pathlib.Path('server.py').read_text()
           tree = ast.parse(src)
           print(f'server.py: {len(list(ast.walk(tree)))} nos AST analisados OK')
           "
