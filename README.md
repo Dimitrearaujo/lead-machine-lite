@@ -1,5 +1,7 @@
 # Lead Machine Lite
 
+![CI](https://github.com/Dimitrearaujo/lead-machine-lite/actions/workflows/ci.yml/badge.svg)
+
 Landing page publica com diagnostico empresarial automatico via IA. O lead preenche um formulario, o sistema conduz um chat de ate 10 perguntas geradas pelo Claude e entrega um relatorio completo com estado atual, gargalos e futuro com IA.
 
 Voce ve tudo no dashboard local e chega na call ja sabendo o perfil do lead.

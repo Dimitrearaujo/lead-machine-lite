@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Syntax check
+        run: |
+          python -m py_compile backend/server.py
+          python -m py_compile backend/fcntl.py
+          echo "Todos os modulos OK"
+
+      - name: Startup test (sem chaves)
+        env:
+          ANTHROPIC_API_KEY: "sk-ant-test"
+          ALUNO_TOKEN: "test-token"
+          PORT: "8792"
+        run: |
+          python -c "
+          import os, importlib.util, pathlib
+          # Verifica que o servidor importa sem erro de sintaxe
+          spec = importlib.util.spec_from_file_location('server', 'backend/server.py')
+          # Apenas verifica syntax — nao inicializa o app (evita chamadas de rede)
+          import ast
+          src = pathlib.Path('backend/server.py').read_text()
+          tree = ast.parse(src)
+          print(f'server.py: {len(list(ast.walk(tree)))} nos AST analisados OK')
+          "
