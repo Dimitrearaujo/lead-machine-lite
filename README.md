@@ -107,7 +107,7 @@ You see everything in the local dashboard and join the sales call already knowin
 
 ## How it works
 
-`
+```
 Lead accesses public URL
        |
        v
@@ -121,7 +121,7 @@ Report generated: current state, bottlenecks, future with AI
        |
        v
 You see it on dashboard: http://127.0.0.1:8792/dashboard
-`
+```
 
 ## Stack
 
@@ -135,7 +135,7 @@ You see it on dashboard: http://127.0.0.1:8792/dashboard
 
 **Prerequisites**: Python 3.10+, cloudflared installed
 
-`powershell
+```powershell
 # 1. Clone and install dependencies
 git clone https://github.com/Dimitrearaujo/lead-machine-lite
 cd lead-machine-lite
@@ -148,20 +148,41 @@ copy .env.example .env
 
 # 3. Start
 powershell -ExecutionPolicy Bypass -File scripts\start.ps1
-`
+```
 
 ## Key endpoints
 
 | Method | Route | Description |
 |---|---|---|
+| GET | `/health` | Backend status |
 | POST | `/lead/new` | Creates lead and returns first question |
 | POST | `/lead/answer` | Sends answer and receives next question |
+| GET | `/lead/status/{id}` | Diagnosis status |
 | GET | `/lead/result/{id}` | Final diagnosis report |
 | GET | `/dashboard` | Operator dashboard (requires ALUNO_TOKEN) |
+| GET | `/api/leads` | Lists leads (requires ALUNO_TOKEN) |
+| POST | `/lead/generate-copy` | Generates marketing copy for the lead |
 | POST | `/lead/generate-kit` | Generates full commercial kit for the lead |
+
+## Windows scripts (scripts/ folder)
+
+```powershell
+scripts\start.ps1    # starts backend + tunnel, saves URL to tunnel-url.txt
+scripts\stop.ps1     # stops everything
+scripts\restart.ps1  # restarts
+scripts\status.ps1   # shows state, URL and latest logs
+```
+
+## Note on Windows
+
+The `fcntl.py` at the root is a compatibility shim — replaces the Unix `fcntl` module with safe no-ops for single-process local server usage.
 
 ## License
 
 MIT
 
 </details>
+
+---
+
+[← Back to profile](https://github.com/Dimitrearaujo)
